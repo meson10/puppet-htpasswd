@@ -1,20 +1,19 @@
-define htpasswd::user($password, $file, $ensure = present, $encryption = 'md5')
+define htpasswd::user($password, $file, $ensure = present, $encryption = md5)
 {
-    Exec{
+    Exec {
         path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+        user => root
     }
 
-    package {"apache2-utils":   ensure => present } 
-
-    file{$file:
-        ensure => present,
-    }
-    
+    htpasswd::file{"${name}":
+        file => $file    
+    }  
+  
     case $encryption {
-        'md5':      {   $enctype = "-m" }
-        'sha':      {   $enctype = "-s" }
-        'crypt':    {   $enctype = "-d" }
-        'plain':    {   $enctype = "-p" }
+        md5:        {   $enctype = "-m" }
+        sha:        {   $enctype = "-s" }
+        crypt:      {   $enctype = "-d" }
+        plain:      {   $enctype = "-p" }
         default:    {   $enctype = "-m" } 
     }    
 
@@ -24,8 +23,9 @@ define htpasswd::user($password, $file, $ensure = present, $encryption = 'md5')
         default:    {   $cmd = "htpasswd -b ${enctype} $file ${name} ${password}" }
     }
 
-    exec {"manage_user":
+    exec {"manage_user_${name}":
+        path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
         command => "${cmd}",
-        require => [Package['apache2-utils'], File[$file]],
+        require => Htpasswd::File["${name}"],
     }
 }

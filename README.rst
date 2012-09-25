@@ -10,7 +10,8 @@ examples
 
 Create or updating an entry on the auth file
 ::
-    
+    package{'apache2-utils': ensure => installed }   
+ 
     htpasswd::user {"username":
         file => '/path_to_my_file',
         password => 'username_password'
@@ -19,6 +20,7 @@ Create or updating an entry on the auth file
 
 Deleting an user
 ::
+     package{'apache2-utils': ensure => installed }      
     
      htpasswd::user {"username":
         file => '/path_to_my_file',
@@ -28,11 +30,12 @@ Deleting an user
 
 Controling the encryptation, options are(`md5`, `sha`, `plain`, `crypt`)
 ::
+    package{'apache2-utils': ensure => installed }   
     
-      htpasswd::user {"username":
+    htpasswd::user {"username":
         file => '/path_to_my_file',
-        ensure => absent,
-        encryptation => 'sha'
+        ensure => present,
+        encryptation => sha
     }
       
 
