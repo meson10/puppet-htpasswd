@@ -33,6 +33,7 @@ Controling the encryptation, options are(`md5`, `sha`, `plain`, `crypt`)
     package{'apache2-utils': ensure => installed }   
     
     htpasswd::user {"username":
+        password => 'userpassword',
         file => '/path_to_my_file',
         ensure => present,
         encryptation => sha
