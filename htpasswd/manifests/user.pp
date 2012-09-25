@@ -2,10 +2,9 @@ define htpasswd::user($password, $file, $ensure = present, $encryption = md5)
 {
     Exec {
         path => '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
-        user => root
     }
 
-    htpasswd::file{"${name}":
+    htpasswd::file{"${name}": 
         file => $file    
     }  
   
